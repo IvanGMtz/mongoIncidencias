@@ -238,4 +238,68 @@ db.incidencias.insertMany([
         area: 1, 
         trainer: 2 }
 ]);
-  
+
+use("db_campus_incidencias");
+db.createCollection("usuario",{
+    validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          additionalProperties: false,
+          required: ['cc', 'nombre', 'rol'],
+          properties: {
+            _id:{
+                bsonType: 'objectId',
+            },
+            cc:{
+                bsonType: "int",
+                description: "La cedula es obligatorio y tiene que se de tipo numerico"
+            },
+            nombre: { 
+                bsonType: 'string',
+                description: 'El nombre es obligatorio y solo resive letras' ,
+                pattern: "^[a-zA-Z ]+$"
+            },
+            rol: { 
+                bsonType: 'array',
+                description: "El rol es obligatorio",
+                items: {
+                    bsonType: "int",
+                }
+            },
+            permisos: { 
+                bsonType: 'object',
+                description: "Ingrese los permisos",
+                properties: {
+                    "/user": {
+                        bsonType: "array",
+                        items: {
+                            bsonType: "string",
+                            description: "Ingrese la version autorizada",
+                        }
+                    }
+                }
+            }
+          },
+        }
+    }
+});
+db.usuario.insertMany([
+    {
+        cc: 123456789,
+        nombre: "admin",
+        rol: [1],
+        permisos:{
+            "/trainer": ["1.0.0", "2.2.1"],
+            "/area": ["1.0.0", "2.2.1"],
+            "/incidencia": ["1.0.0", "2.2.1"]
+        }
+    },
+    {
+        cc: 456789123,
+        nombre: "Ivan",
+        rol: [2],
+        permisos:{
+            "/trainer": ["1.0.0", "2.2.1"]
+        }
+    }
+]);
