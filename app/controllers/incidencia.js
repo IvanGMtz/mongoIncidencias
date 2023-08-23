@@ -18,7 +18,6 @@ export const addIncidencia = async (req, res) => {
       { field: "CATEGORIA", message: "Incidencia CATEGORIA not provided" },
       { field: "TIPO", message: "Incidencia TIPO not provided" },
       { field: "DESCRIPCION", message: "Incidencia DESCRIPCION not provided" },
-      { field: "FECHA_REPORTE", message: "Incidencia FECHA_REPORTE not provided" },
       { field: "SEVERIDAD", message: "Incidencia SEVERIDAD not provided" },
       { field: "IDA", message: "Incidencia IDA not provided" },
       { field: "IDT", message: "Incidencia IDT not provided" }
