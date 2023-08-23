@@ -3,5 +3,5 @@ import { crearToken } from '../middlewares/JWT.js';
 
 const app = express();
 
-app.get('/:usuario', crearToken);
+app.get('/', crearToken);
 export default app;
