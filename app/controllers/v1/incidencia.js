@@ -1,17 +1,16 @@
-import {con} from "../../config/connection/atlas.js";
-import {siguienteId} from "../helpers/counter.js";
-
+import {con} from "../../../config/connection/atlas.js";
+import {siguienteId} from "../../helpers/counter.js";
 let db = await con();
 let collection = db.collection("incidencias");
 
-export const getIncidencias = async (req, res)=>{
+export const getIncidenciasV1 = async (req, res)=>{
     if (!req.rateLimit) return;
     let result = await collection.find().toArray();
     res.send(result);
 }
 
 
-export const addIncidencia = async (req, res) => {
+export const addIncidenciaV1 = async (req, res) => {
     if (!req.rateLimit) return;
 
     const requiredFields = [
@@ -52,4 +51,4 @@ export const addIncidencia = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: "Error adding incidencia", error: error.errInfo.details.schemaRulesNotSatisfied[0].propertiesNotSatisfied[0].description});
     }
-  };
+};
