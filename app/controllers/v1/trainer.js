@@ -1,17 +1,15 @@
-import {con} from "../../config/connection/atlas.js";
-import {siguienteId} from "../helpers/counter.js";
-
+import {con} from "../../../config/connection/atlas.js";
+import {siguienteId} from "../../helpers/counter.js";
 let db = await con();
 let collection = db.collection("trainers");
 
-export const getTrainers = async (req, res)=>{
+export const getTrainersV1 = async (req, res)=>{
     if (!req.rateLimit) return;
     let result = await collection.find().toArray();
     res.send(result);
 }
 
-
-export const addTrainer = async (req, res) => {
+export const addTrainerV1 = async (req, res) => {
     if (!req.rateLimit) return;
 
     const requiredFields = [
