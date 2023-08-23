@@ -1,0 +1,241 @@
+use("db_campus_incidencias");
+db.createCollection("counters");
+db.counters.insertMany([
+    { id: "incidenciasId", sequence_value: 0 },
+    { id: "trainersId", sequence_value: 0 },
+    { id: "areasId", sequence_value: 0 },
+    { id: "rolesId", sequence_value: 0 }
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+}
+
+db.createCollection("roles");
+db.roles.insertMany([
+    { id: Number(siguienteId("roles")) ,name: "admin",access:["/incidencia","/trainer","/area"]},
+    { id: Number(siguienteId("roles")), name: "trainer", access: ["/incidencia"] },
+    { id: Number(siguienteId("roles")), name: "camper", access: ["/incidencia"] }
+]);
+
+db.createCollection("areas", {
+    capped: true,
+    size: 100000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'id', 'tipo', 'nombre', 'computadores', 'teclados', 'mouse', 'diademas'],
+            properties: {
+                _id: {
+                    bsonType: "objectId",
+                    description: "ID del área generado por MongoDB"
+                },
+                id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                tipo: {
+                    bsonType: 'string',
+                    description: 'Tipo del área (training o review)'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'Nombre del área'
+                },
+                computadores: {
+                    bsonType: 'int',
+                    description: 'Cantidad de computadores',
+                    minimum: 0
+                },
+                teclados: {
+                    bsonType: 'int',
+                    description: 'Cantidad de teclados',
+                    minimum: 0
+                },
+                mouse: {
+                    bsonType: 'int',
+                    description: 'Cantidad de mouse',
+                    minimum: 0
+                },
+                diademas: {
+                    bsonType: 'int',
+                    description: 'Cantidad de diademas',
+                    minimum: 0
+                }
+            }
+        }
+    }
+});
+
+db.createCollection("trainers", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'id', 'nombre', 'email_personal', 'email_corporativo', 'telefono_movil', 'telefono_empresa'],
+            properties: {
+                _id: {
+                    bsonType: "objectId",
+                    description: "ID del entrenador generado por MongoDB"
+                },
+                id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'Nombre del entrenador'
+                },
+                email_personal: {
+                    bsonType: 'string',
+                    description: 'Email personal del entrenador',
+                    pattern: '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
+                },
+                email_corporativo: {
+                    bsonType: 'string',
+                    description: 'Email corporativo del entrenador',
+                    pattern: '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
+                },
+                telefono_movil: {
+                    bsonType: 'string',
+                    description: 'Teléfono móvil del entrenador',
+                    pattern: '^[0-9]+$'
+                },
+                telefono_residencia: {
+                    bsonType: 'string',
+                    description: 'Teléfono residencial del entrenador (opcional)',
+                    pattern: '^[0-9]*$'
+                },
+                telefono_empresa: {
+                    bsonType: 'string',
+                    description: 'Teléfono de la empresa del entrenador',
+                    pattern: '^[0-9]+$'
+                },
+                telefono_movil_empresarial: {
+                    bsonType: 'string',
+                    description: 'Teléfono móvil empresarial del entrenador',
+                    pattern: '^[0-9]+$'
+                }
+            }
+        }
+    }
+});
+
+db.createCollection("incidencias", {
+    capped: true,
+    size: 20000,
+    max: 50,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['_id', 'id', 'categoria', 'tipo', 'descripcion', 'fecha_reporte', 'severidad', 'area', 'trainer'],
+            properties: {
+                _id: {
+                    bsonType: "objectId",
+                    description: "ID de la incidencia generado por MongoDB"
+                },
+                id: {
+                    bsonType: "int",
+                    description: "ID del usuario"
+                },
+                categoria: {
+                    bsonType: 'string',
+                    description: 'Categoría de la incidencia'
+                },
+                tipo: {
+                    bsonType: 'string',
+                    description: 'Tipo de la incidencia'
+                },
+                descripcion: {
+                    bsonType: 'string',
+                    description: 'Descripción de la incidencia'
+                },
+                fecha_reporte: {
+                    bsonType: 'date',
+                    description: 'Fecha de reporte de la incidencia'
+                },
+                severidad: {
+                    enum: ['leve', 'moderada', 'critica'],
+                    description: 'Severidad de la incidencia: leve, moderada o critica'
+                },
+                area: {
+                    bsonType: 'int',
+                    description: 'ID referente al área relacionada'
+                },
+                trainer: {
+                    bsonType: 'int',
+                    description: 'ID referente al entrenador relacionado'
+                }
+            }
+        }
+    }
+});
+
+db.areas.insertMany([
+    { 
+        id: Number(siguienteId("areas")), 
+        tipo: "training", 
+        nombre: "Área de Entrenamiento 1", 
+        computadores: 10, 
+        teclados: 15, 
+        mouse: 20, 
+        diademas: 5 },
+    { 
+        id: Number(siguienteId("areas")), 
+        tipo: "review", 
+        nombre: "Área de Revisión 1", 
+        computadores: 5, 
+        teclados: 8, 
+        mouse: 12, 
+        diademas: 2 }
+]);
+
+db.trainers.insertMany([
+    { 
+        id: Number(siguienteId("trainers")), 
+        nombre: "Entrenador 1", 
+        email_personal: "entrenador1@email.com", 
+        email_corporativo: "entrenador1@empresa.com", 
+        telefono_movil: "123456789", 
+        telefono_empresa: "111222333" },
+    { 
+        id: Number(siguienteId("trainers")), 
+        nombre: "Entrenador 2", 
+        email_personal: "entrenador2@email.com", 
+        email_corporativo: "entrenador2@empresa.com", 
+        telefono_movil: "987654321", 
+        telefono_empresa: "444555666" }
+]);
+
+db.incidencias.insertMany([
+    { 
+        id: Number(siguienteId("incidencias")), 
+        categoria: "Hardware", 
+        tipo: "Fallo de Teclado", 
+        descripcion: "Teclado no responde", 
+        fecha_reporte: ISODate("2023-08-23"), 
+        severidad: "leve", 
+        area: 2, 
+        trainer: 1 },
+    { 
+        id: Number(siguienteId("incidencias")), 
+        categoria: "Software", 
+        tipo: "Error de Software", 
+        descripcion: "Aplicación se bloquea al abrir", 
+        fecha_reporte: ISODate("2023-08-23"), 
+        severidad: "moderada", 
+        area: 1, 
+        trainer: 2 }
+]);
+  
