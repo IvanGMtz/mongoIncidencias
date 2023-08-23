@@ -43,30 +43,30 @@ db.createCollection("areas", {
                 },
                 tipo: {
                     bsonType: 'string',
-                    description: 'Tipo del área (training o review)'
+                    description: 'TIPO del área (training o review)'
                 },
                 nombre: {
                     bsonType: 'string',
-                    description: 'Nombre del área'
+                    description: 'NOMBRE del área'
                 },
                 computadores: {
                     bsonType: 'int',
-                    description: 'Cantidad de computadores',
+                    description: 'Cantidad de COMPUTADORES',
                     minimum: 0
                 },
                 teclados: {
                     bsonType: 'int',
-                    description: 'Cantidad de teclados',
+                    description: 'Cantidad de TECLADOS',
                     minimum: 0
                 },
                 mouse: {
                     bsonType: 'int',
-                    description: 'Cantidad de mouse',
+                    description: 'Cantidad de MOUSE',
                     minimum: 0
                 },
                 diademas: {
                     bsonType: 'int',
-                    description: 'Cantidad de diademas',
+                    description: 'Cantidad de DIADEMAS',
                     minimum: 0
                 }
             }
@@ -151,31 +151,31 @@ db.createCollection("incidencias", {
                 },
                 categoria: {
                     bsonType: 'string',
-                    description: 'Categoría de la incidencia'
+                    description: 'CATEGORIA de la incidencia'
                 },
                 tipo: {
                     bsonType: 'string',
-                    description: 'Tipo de la incidencia'
+                    description: 'TIPO de la incidencia'
                 },
                 descripcion: {
                     bsonType: 'string',
-                    description: 'Descripción de la incidencia'
+                    description: 'DESCRIPCION de la incidencia'
                 },
                 fecha_reporte: {
                     bsonType: 'date',
-                    description: 'Fecha de reporte de la incidencia'
+                    description: 'FECHA_REPORTE de la incidencia'
                 },
                 severidad: {
                     enum: ['leve', 'moderada', 'critica'],
-                    description: 'Severidad de la incidencia: leve, moderada o critica'
+                    description: 'SEVERIDAD de la incidencia: leve, moderada o critica'
                 },
                 area: {
                     bsonType: 'int',
-                    description: 'ID referente al área relacionada'
+                    description: 'IDA referente al área relacionada'
                 },
                 trainer: {
                     bsonType: 'int',
-                    description: 'ID referente al entrenador relacionado'
+                    description: 'IDT referente al entrenador relacionado'
                 }
             }
         }
