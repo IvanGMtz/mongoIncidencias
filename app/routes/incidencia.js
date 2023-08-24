@@ -1,13 +1,13 @@
 import express from "express";
 import {limitGet} from "../middlewares/limit.js";
-import passportHelper from '../helpers/passport.js';
+import {validarToken} from "../middlewares/JWT.js";
 import {getIncidenciasV1, addIncidenciaV1} from "../controllers/v1/incidencia.js"
 import {getIncidenciasV2, deleteIncidenciaV2} from "../controllers/v2/incidencia.js"
 import routesVersioning  from 'express-routes-versioning';
 const version = routesVersioning();
 
 const appIncidencia = express.Router();
-appIncidencia.use(limitGet(), passportHelper.authenticate('bearer', { session: false }));
+appIncidencia.use(limitGet(), validarToken);
 
 appIncidencia.get("/", version({
     "^1.0.0": getIncidenciasV1,

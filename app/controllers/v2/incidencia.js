@@ -11,7 +11,7 @@ export const getIncidenciasV2 = async (req, res)=>{
 
 export const deleteIncidenciaV2 = async (req, res) => {
     if (!req.rateLimit) return;
-    const IncidenciaIdToDelete = Number(req.body.id);
+    const IncidenciaIdToDelete = Number(req.params.id);
     if (!IncidenciaIdToDelete) {
       res.status(400).json({ message: "Incidencia ID not provided" });
       return;
