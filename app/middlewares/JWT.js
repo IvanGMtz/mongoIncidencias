@@ -7,37 +7,43 @@ dotenv.config();
 const conexionDB = await con();
 const crearToken = async (req, res, next) => {
     if (Object.keys(req.body).length === 0) return res.status(400).send({message: "Datos no enviados"});
-    const result = await conexionDB.collection('usuario').findOne(req.body);
-    console.log(result);
-    if (!result) return res.status(401).send({message: "Usuario no encontrado"});
-    const encoder = new TextEncoder();
-    const id = result._id.toString();
-    const jwtConstructor = await new SignJWT({ id: id})
-        .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+    try {
+        const result = await conexionDB.collection('usuario').findOne(req.body);
+        console.log(result);
+        const id = result._id.toString();
+        const encoder = new TextEncoder();
+        const jwtconstructor = await new SignJWT({ id: id});
+        const jwt = await jwtconstructor
+        .setProtectedHeader({ alg: "HS256", typ: "JWT" })
         .setIssuedAt()
-        .setExpirationTime('3h')
-        .sign(encoder.encode(process.env.JWT_SECRET));
-    req.data = {status: 200, message: jwtConstructor};
-    res.send(jwtConstructor)
-    next(); 
+        .setExpirationTime("3h")
+        .sign(encoder.encode(process.env.JWT_PASSWORD));
+        res.send(jwt)
+    } catch (error) {
+        res.status(404).send({ status: 404, message: "Collection not found" })
+    }
+    next();  
 }
-const validarToken = async (req, token) => {
+const validarToken = async (req, res, next) => {
+    const { authorization } = req.headers;
+    if (!authorization) return res.status(400).send({ status: 400, token: "Token not sent" });
     try {
         const encoder = new TextEncoder();
         const jwtData = await jwtVerify(
-            token,
-            encoder.encode(process.env.JWT_SECRET)
+            authorization,
+            encoder.encode(process.env.JWT_PASSWORD)
         );
-        let res = await conexionDB.collection('usuario').findOne(
-            {
-                _id:new ObjectId(jwtData.payload.id),
-                [`permisos.${req.baseUrl}`]: `${req.headers["accept-version"]}`
-            }
-        );
-        let {_id, permisos, ...usuario} = res;
-        return usuario;
+        req.data = jwtData;
+        let result = await conexionDB.collection('usuario').findOne({_id:new ObjectId(jwtData.payload.id)})
+        if(!(req.baseUrl in result.permisos)) return res.json({status:404,message: 'The endpoint is not allowed'})
+        let versiones = result.permisos[req.baseUrl];
+        if(!(versiones.includes(req.headers["accept-version"]))) return res.json({status:404,message: 'The version is not allowed'})
+        const allowedMethods = result.permisos[req.baseUrl];
+        const currentMethod = req.method.toLowerCase();
+        if (!allowedMethods.includes(currentMethod)) return res.json({status:404, message: 'The method is not allowed'});
+        next();
     } catch (error) {
-        return false;
+        res.status(498).json({ status: 498, message: error.message })
     }
 }
 export {
