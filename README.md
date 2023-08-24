@@ -46,26 +46,35 @@ Para de interactuar con los endpoints debes primeramente crear un token  a parti
 
 1. **Rol: admin**
    - Acceso:
-     - "/trainer"
-     - "/incidencia"
-     - "/area"
+     - "/trainer" versión: 1.0.0 y 2.2.1
+     - "/incidencia" versión: 1.0.0 y 2.2.1
+     - "/area" versión: 1.0.0 y 2.2.1
 2. **Rol: trainer**
    - Acceso:
-     - "/incidencia"
+     - "/incidencia" versión: 1.0.0 y 2.2.1
+     - "/trainer" versión: 1.0.0
 3. **Rol: camper**
    - Acceso:
-     - "/incidencia"
+     - "/incidencia" versión: 1.0.0
 
 ```http
-GET http://127.10.10.15:3001/token/<rol>
+GET http://127.10.10.15:3001/token
 ```
 
-Usaremos el usuario que tiene rol admin para poder ingresar a todas las peticiones.
+Ejemplos de datos a enviar a través del body:
+
+```json
+{
+    "nombre": "admin"
+ }
+```
+
+Usaremos el usuario admin para poder ingresar a todas las peticiones.
 
 Se generará el siguiente código que se debe agregar al HTTP Header de tipo Authorization:
 
 ```json
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTRiODM1NmRmODc3ZmZhYjI3NTUzYiIsImlhdCI6MTY5MjcyNjYwNywiZXhwIjoxNjkyNzMwMjA3fQ.Cj9iA7QH6s3Eweew7Frw0LY09SSRbAYqwTzehheAUWg
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTRiODM1NmRmODc3ZmZhYjI3NTUzYiIsImlhdCI6MTY5MjcyNjYwNywiZXhwIjoxNjkyNzMwMjA3fQ.Cj9iA7QH6s3Eweew7Frw0LY09SSRbAYqwTzehheAUWg
 ```
 
 ## Petición
@@ -78,7 +87,7 @@ GET http://127.10.10.15:3001/<nombre_endpoint>
 
 ## Endpoints Disponibles
 
-### Listar incidencias
+### Listar incidencias v1.0.0
 
 Endpoint: `GET /incidencias`
 
@@ -111,7 +120,7 @@ Este endpoint te permite listar todos las incidencias registradas en el sistema.
     ...]
 ```
 
-### Crear incidencias
+### Crear incidencia v1.0.0
 
 Endpoint: `POST /incidencia`
 
@@ -142,7 +151,7 @@ Crea una nueva incidencia en el sistema. Los datos de entrada deben incluir:
       "SEVERIDAD": "moderada",
       "IDA": 1,
       "IDT": 2
-    }
+   }
   ```
   
   Respuesta:
@@ -154,7 +163,7 @@ Crea una nueva incidencia en el sistema. Los datos de entrada deben incluir:
   }
   ```
 
-### Listar areas
+### Listar areas v1.0.0
 
 Endpoint: `GET /area`
 
@@ -185,7 +194,7 @@ Este endpoint te permite listar todos las area registradas en el sistema. Ejempl
     ...]
 ```
 
-### Crear areas
+### Crear areas v2.2.1
 
 Endpoint: `POST /area`
 
@@ -225,7 +234,7 @@ Crea una nueva area en el sistema. Los datos de entrada deben incluir:
   }
   ```
 
-### Listar trainers
+### Listar trainers v1.0.0
 
 Endpoint: `GET /trainer`
 
@@ -254,7 +263,7 @@ Este endpoint te permite listar todos las incidencias registradas en el sistema.
     ...]
 ```
 
-### Crear trainers
+### Crear trainers v2.2.1
 
 Endpoint: `POST /trainer`
 
@@ -280,16 +289,14 @@ Crea un nuevo trainer en el sistema. Los datos de entrada deben incluir, los tel
 
   ```json
   {
-      "CATEGORIA": "Software",
-      "TIPO": "Error de Software",
-      "DESCRIPCION": "Aplicación se bloquea al abrir",
-      "FECHA_REPORTE": "2023-08-23",
-      "SEVERIDAD": "moderada",
-      "IDA": 1,
-      "IDT": 2
-    }
+      "NOMBRE": "Entrenador 3", 
+      "EMAIL_PERSONAL": "entrenador3@email.com", 
+      "EMAIL_CORPORATIVO": "entrenador3@empresa.com", 
+      "TELEFONO_MOVIL": "+57123456789", 
+      "TELEFONO_EMPRESA": "+57111222333
+   }
   ```
-
+  
   Respuesta:
 
   ```json
