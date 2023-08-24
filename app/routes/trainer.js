@@ -1,8 +1,8 @@
 import express from "express";
 import {limitGet} from "../middlewares/limit.js";
 import passportHelper from '../helpers/passport.js';
-import {getTrainersV1, addTrainerV1} from "../controllers/v1/trainer.js"
-import {getTrainersV2} from "../controllers/v2/trainer.js"
+import {getTrainersV1} from "../controllers/v1/trainer.js"
+import {getTrainersV2, addTrainerV2, deleteTrainerV2} from "../controllers/v2/trainer.js"
 import routesVersioning  from 'express-routes-versioning';
 const version = routesVersioning();
 const appTrainer = express.Router();
@@ -15,6 +15,11 @@ appTrainer.get("/", version({
 }));
 
 appTrainer.post("/", version({
-    "^1.0.0": addTrainerV1
+    "~2.2.1": addTrainerV2
 }));
+
+appTrainer.delete("/:id", version({
+    "~2.2.1": deleteTrainerV2
+}));
+
 export default appTrainer;
