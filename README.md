@@ -44,18 +44,19 @@ npm run dev
 
 Para de interactuar con los endpoints debes primeramente crear un token  a partir del usuario y su rol:
 
-1. **Rol: admin**
+1. **Rol: admin** 
    - Acceso:
-     - "/trainer" versión: 1.0.0 y 2.2.1
-     - "/incidencia" versión: 1.0.0 y 2.2.1
-     - "/area" versión: 1.0.0 y 2.2.1
+     - "/trainer" versión: 1.0.0 y 2.2.1 - Metodos [ 'get' , 'post' , 'delete' ]
+     - "/incidencia" versión: 1.0.0 y 2.2.1  - Metodos [ 'get' , 'post' , 'delete' ]
+     - "/area" versión: 1.0.0 y 2.2.1  - Metodos [ 'get' , 'post']
 2. **Rol: trainer**
    - Acceso:
-     - "/incidencia" versión: 1.0.0 y 2.2.1
-     - "/trainer" versión: 1.0.0
+     - "/incidencia" versión: 1.0.0 y 2.2.1 - Metodos [ 'get' , 'post' ]
+     - "/trainer" versión: 1.0.0 - Metodos [ 'get' ]
+     - "/area" versión: 1.0.0  - Metodos [ 'get' ]
 3. **Rol: camper**
    - Acceso:
-     - "/incidencia" versión: 1.0.0
+     - "/incidencia" versión: 1.0.0 - Metodos [ 'get' , 'post' ]
 
 ```http
 GET http://127.10.10.15:3001/token
@@ -74,7 +75,7 @@ Usaremos el usuario admin para poder ingresar a todas las peticiones.
 Se generará el siguiente código que se debe agregar al HTTP Header de tipo Authorization:
 
 ```json
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTRiODM1NmRmODc3ZmZhYjI3NTUzYiIsImlhdCI6MTY5MjcyNjYwNywiZXhwIjoxNjkyNzMwMjA3fQ.Cj9iA7QH6s3Eweew7Frw0LY09SSRbAYqwTzehheAUWg
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTdkNTgxNzFmNzdjMjgxNmUzNmIyZiIsImlhdCI6MTY5MjkxNTMwNCwiZXhwIjoxNjkyOTI2MTA0fQ.CRqfVyMSvltKh7X-mqP-2hRxG-1kFY6ZYwM0vfaDXbQ
 ```
 
 ## Petición
@@ -306,18 +307,51 @@ Crea un nuevo trainer en el sistema. Los datos de entrada deben incluir, los tel
   }
   ```
 
+### Eliminar incidencia v2.2.1
+
+Endpoint: `DELETE /incidencia/<id>`
+
+Eliminar una incidencia especifica en el sistema. La peticion debe hacerse de la siguiente manera:
+
+```http
+DELETE http://127.10.10.15:3001/incidencia/2
+```
+
+Respuesta:
+
+```json
+{
+  "message": "Incidencia deleted successfully"
+}
+```
+
+### Eliminar trainer v2.2.1
+
+Endpoint: `DELETE /trainer/<id>`
+
+Eliminar un trainer especifico en el sistema. La peticion debe hacerse de la siguiente manera:
+
+```http
+DELETE http://127.10.10.15:3001/trainer/2
+```
+
+Respuesta:
+
+```json
+{
+  "message": "Trainer deleted successfully"
+}
+```
+
 ## Dependencias Utilizadas
 
 Este proyecto utiliza diversas dependencias para su funcionamiento. A continuación, se detallan las dependencias principales y sus respectivas versiones:
 
 - **express**: 4.18.2 Express es un marco de aplicación web rápido, minimalista y flexible para Node.js. Es utilizado en este proyecto para manejar las rutas y la lógica de la aplicación.
-
 - **dotenv**: 16.3.1 Dotenv es una librería que permite cargar variables de entorno desde un archivo `.env`. En este proyecto, se utiliza para gestionar las configuraciones sensibles.
 - **express-rate-limit**: 6.8.1 Express Rate Limit es un middleware que proporciona limitación de velocidad y control de la frecuencia de las solicitudes HTTP. Se utiliza aquí para prevenir ataques de fuerza bruta y abusos.
 - **mongodb**: 5.7.0 MongoDB es una base de datos NoSQL ampliamente utilizada. En este proyecto, se usa para almacenar y recuperar datos relacionados con el alquiler de autos.
 - **nodemon**: 3.0.1 Nodemon es una herramienta que ayuda en el desarrollo al reiniciar automáticamente la aplicación cuando se detectan cambios en el código fuente. Esto agiliza el proceso de desarrollo y prueba.
 - **jose** (4.14.4): Esta dependencia parece relacionarse con JSON Web Tokens (JWT) y puede estar relacionada con la autenticación y la seguridad en tu aplicación.
 - **express-session** (1.17.3): Express Session es una librería que permite gestionar sesiones de usuario en aplicaciones Express.js. Puede ser utilizada para mantener el estado de la sesión del usuario en el servidor.
-- **passport** (0.6.0): Passport es un middleware de autenticación para Node.js que proporciona una forma flexible de autenticar las solicitudes. Puede utilizarse para autenticación local, social y basada en tokens, entre otras estrategias.
-- **passport-http-bearer** (1.0.1): Esta dependencia parece estar relacionada con la estrategia de autenticación Bearer en Passport. La autenticación Bearer se utiliza a menudo con tokens JWT para autenticar las solicitudes.
-- **morgan** (^1.10.0): Morgan es un middleware de registro de solicitudes HTTP para Node.js. Puede utilizarse para registrar detalles sobre las solicitudes entrantes en la aplicación.
+- **express-routes-versioning**: ^1.0.1: Express Routes  Versioning es una librería para Node.js que permite manejar y gestionar  versiones en las rutas de una aplicación Express de manera sencilla. Con esta dependencia, puedes definir y mantener diferentes versiones de tus rutas en función de los cambios y actualizaciones que realices en tu  API. Esto es útil para garantizar la compatibilidad hacia atrás y  permitir que los clientes sigan utilizando versiones anteriores de tu  API mientras introduces nuevas funcionalidades.
