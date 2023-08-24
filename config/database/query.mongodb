@@ -288,9 +288,9 @@ db.usuario.insertMany([
         nombre: "admin",
         rol: [1],
         permisos:{
-            "/trainer": ["1.0.0", "2.2.1"],
-            "/area": ["1.0.0", "2.2.1"],
-            "/incidencia": ["1.0.0", "2.2.1"]
+            "/trainer": ["1.0.0", "2.2.1", "get", "post", "delete"],
+            "/area": ["1.0.0", "2.2.1", "get", "post"],
+            "/incidencia": ["1.0.0", "2.2.1", "get", "post", "delete"]
         }
     },
     {
@@ -298,18 +298,18 @@ db.usuario.insertMany([
         nombre: "trainer",
         rol: [2],
         permisos:{
-            "/trainer": ["1.0.0"],
-            "/incidencia": ["1.0.0", "2.2.1"],
-            "/area": ["1.0.0"]
+            "/trainer": ["1.0.0", "get"],
+            "/incidencia": ["1.0.0", "2.2.1", "get", "post"],
+            "/area": ["1.0.0", "get"]
         }
     },
     {
-        cc: 456789123,
+        cc: 556789123,
         nombre: "camper",
-        rol: [2],
+        rol: [3],
         permisos:{
-            "/incidencia": ["1.0.0"],
-            "/area": ["1.0.0"]
+            "/incidencia": ["1.0.0", "get", "post"],
+            "/area": ["1.0.0", "get"]
         }
     }
 ]);
