@@ -239,7 +239,6 @@ db.incidencias.insertMany([
         trainer: 2 }
 ]);
 
-use("db_campus_incidencias");
 db.createCollection("usuario",{
     validator: {
         $jsonSchema: {
@@ -296,10 +295,19 @@ db.usuario.insertMany([
     },
     {
         cc: 456789123,
-        nombre: "Ivan",
+        nombre: "trainer",
         rol: [2],
         permisos:{
-            "/trainer": ["1.0.0", "2.2.1"]
+            "/trainer": ["1.0.0"],
+            "/incidencia": ["1.0.0", "2.2.1"]
+        }
+    },
+    {
+        cc: 456789123,
+        nombre: "camper",
+        rol: [2],
+        permisos:{
+            "/incidencia": ["1.0.0"]
         }
     }
 ]);
